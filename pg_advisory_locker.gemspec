@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
  s.name        = 'pg_advisory_locker'
  s.version     = PgAdvisoryLocker::VERSION
  s.license     = 'New BSD License'
- s.date        = '2012-09-18'
+ s.date        = '2012-09-20'
  s.summary     = "Helper for calling PostgreSQL pg_advisory_lock, pg_advisory_try_lock, and pg_advisory_unlock."
  s.description = "This gem provides a module that, when included in your ActiveRecord model, provides methods to acquire and release advisory locks for PostgreSQL connections."
  s.authors     = ["Keith Gabryelski"]
