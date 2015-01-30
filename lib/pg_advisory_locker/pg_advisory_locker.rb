@@ -91,7 +91,7 @@ module PgAdvisoryLocker
     # if block is passed in, lock/unlock around the block
     def pg_advisory_lock(key1, key2, &block)
       locked = uncached do
-        find_by_sql(["select pg_advisory_lock(?, ?)", key1, key2]).first.pg_advisory_lock == "t"
+        find_by_sql(["select pg_advisory_lock(?, ?) AS result", key1, key2]).first.result
       end
       if block.present?
         begin
@@ -115,7 +115,7 @@ module PgAdvisoryLocker
     # executing block only if lock is acquired
     def pg_try_advisory_lock(key1, key2, &block)
       locked = uncached do
-        find_by_sql(["select pg_try_advisory_lock(?, ?)", key1, key2]).first.pg_try_advisory_lock == "t"
+        find_by_sql(["select pg_try_advisory_lock(?, ?) AS result", key1, key2]).first.result
       end
       if locked
         if block.present?
@@ -136,7 +136,7 @@ module PgAdvisoryLocker
     # on return releases lock
     def pg_advisory_unlock(key1, key2)
       unlocked = uncached do
-        find_by_sql(["select pg_advisory_unlock(?, ?)", key1, key2]).first.pg_advisory_unlock == "t"
+        find_by_sql(["select pg_advisory_unlock(?, ?) AS result", key1, key2]).first.result
       end
       return unlocked
     end

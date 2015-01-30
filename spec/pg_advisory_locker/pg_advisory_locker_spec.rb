@@ -53,8 +53,7 @@ describe PgAdvisoryLocker do
     it "locks record" do
       Temp.lock_record(lock_id)
       Temp.find_by_sql("select * from pg_locks").
-          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.
-          should have(1).item
+          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.count.should == 1
       Temp.unlock_record(lock_id)
     end
   end # lock_record
@@ -63,8 +62,7 @@ describe PgAdvisoryLocker do
     it "locks record" do
       Temp.try_lock_record(lock_id)
       Temp.find_by_sql("select * from pg_locks").
-          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.
-          should have(1).item
+          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.count.should == 1
       Temp.unlock_record(lock_id)
     end
   end # try_lock_record
@@ -74,8 +72,7 @@ describe PgAdvisoryLocker do
       Temp.lock_record(lock_id)
       Temp.unlock_record(lock_id)
       Temp.find_by_sql("select * from pg_locks").
-          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.
-          should be_blank
+          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.count.should == 0
     end
   end # unlock_record
 
