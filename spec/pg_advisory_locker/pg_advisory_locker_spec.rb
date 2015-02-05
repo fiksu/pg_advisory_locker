@@ -23,37 +23,38 @@ describe PgAdvisoryLocker do
 
   describe "advisory_lock" do
     it "should receive lock_record" do
-      Temp.should_receive(:lock_record)
+      expect(Temp).to receive(:lock_record)
       subject.advisory_lock
     end
   end # advisory_lock
 
   describe "advisory_try_lock" do
     it "should receive try_lock_record" do
-      Temp.should_receive(:try_lock_record)
+      expect(Temp).to receive(:try_lock_record)
       subject.advisory_try_lock
     end
   end # advisory_try_lock
 
   describe "advisory_unlock" do
     it "should receive unlock_record" do
-      Temp.should_receive(:unlock_record)
+      expect(Temp).to receive(:unlock_record)
       subject.advisory_unlock
     end
   end # advisory_unlock
 
   describe "table_oid" do
     it "returns table_oid" do
-      Temp.find_by_sql("SELECT * FROM pg_class WHERE pg_class.oid = #{Temp.table_oid}").
-          first.relname.should == "temps"
+      table_oid = Temp.find_by_sql("SELECT * FROM pg_class WHERE pg_class.oid = #{Temp.table_oid}").first.relname
+      expect(table_oid).to eq "temps"
     end
   end # table_oid
 
   describe "lock_record" do
     it "locks record" do
       Temp.lock_record(lock_id)
-      Temp.find_by_sql("select * from pg_locks").
-          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.count.should == 1
+      count = Temp.find_by_sql("select * from pg_locks").
+        select{ |x| x.objid == lock_id && x.classid == Temp.table_oid }.count
+      expect(count).to eq 1
       Temp.unlock_record(lock_id)
     end
   end # lock_record
@@ -61,8 +62,9 @@ describe PgAdvisoryLocker do
   describe "try_lock_record" do
     it "locks record" do
       Temp.try_lock_record(lock_id)
-      Temp.find_by_sql("select * from pg_locks").
-          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.count.should == 1
+      count = Temp.find_by_sql("select * from pg_locks").
+        select{ |x| x.objid == lock_id && x.classid == Temp.table_oid }.count
+      expect(count).to eq 1
       Temp.unlock_record(lock_id)
     end
   end # try_lock_record
@@ -71,8 +73,9 @@ describe PgAdvisoryLocker do
     it "unlocks record" do
       Temp.lock_record(lock_id)
       Temp.unlock_record(lock_id)
-      Temp.find_by_sql("select * from pg_locks").
-          select{|x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}"}.count.should == 0
+      count = Temp.find_by_sql("select * from pg_locks").
+        select{ |x| x.objid == "#{lock_id}" && x.classid == "#{Temp.table_oid}" }.count
+      expect(count).to eq 0
     end
   end # unlock_record
 
