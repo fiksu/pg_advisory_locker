@@ -9,7 +9,3 @@ branches:
   only:
     - master
     - production
-notifications:
-  email:
-    - dev-fma@fiksu.com
-

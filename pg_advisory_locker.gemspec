@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
  s.require_path = 'lib'
  s.homepage    = 'http://github.com/fiksu/pg_advisory_locker'
  s.add_dependency "pg"
- s.add_dependency "rails", '>= 4.0.0'
+ s.add_dependency "rails", '~> 4.0', '< 4.1'
  s.add_dependency 'rspec-rails'
 end
