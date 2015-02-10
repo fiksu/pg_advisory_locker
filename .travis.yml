@@ -1,6 +1,7 @@
 language: ruby
 cache: bundler # so we don't have to bundle install every time
 rvm:
+  - 1.9.3
   - 2.1
   - 2.2
 
