@@ -1,15 +1,15 @@
 language: ruby
+cache: bundler # so we don't have to bundle install every time
 rvm:
   - 1.9.3
-bundler_args: --without staging development deploy
-before_install:
-before_script: cp spec/dummy/config/database-sample.yml spec/dummy/config/database.yml; cd spec/dummy; bundle exec rake db:create;
-script: rspec spec
+  - 2.1
+  - 2.2
+
+before_script: travis/before.sh
+
+script: bundle exec rspec
+
 branches:
   only:
     - master
     - production
-notifications:
-  email:
-    - dev-fma@fiksu.com
-
